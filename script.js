@@ -32,3 +32,52 @@ document.querySelectorAll(".magnific-image img").forEach((image) => {
 document.querySelector(".popup-image span").onclick = () => {
   document.querySelector(".popup-image").style.display = "none";
 };
+
+const scriptURL =
+  "https://script.google.com/macros/s/AKfycbwastbz38QO4pkmu_TKWpqfPbQNDsnb5EvuBv5P27Yg2T4t7v7snBIW18NkrH1zrAj6Fw/exec";
+const form = document.forms["larry-rent-contact-form"];
+const btnKirim = document.querySelector(".btn-kirim");
+const btnLoading = document.querySelector(".btn-loading");
+const myAlert = document.querySelector(".my-alert");
+
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  //ketika tombol submit diklik
+  //tampilan tombol loading, hilangkan tombol kirim
+  btnLoading.classList.toggle("d-none");
+  btnKirim.classList.toggle("d-none");
+  try {
+    fetch(scriptURL, { method: "POST", body: new FormData(form) })
+      .then((response) => {
+        //tampilan tombol kirim, hilangkan tombol loading
+        btnLoading.classList.toggle("d-none");
+        btnKirim.classList.toggle("d-none");
+        //tampilkan alert
+        myAlert.classList.toggle("d-none");
+        //reset formnya
+        form.reset();
+        console.log("Success!", response);
+      })
+      .catch((error) => {
+        //tampilan tombol kirim, hilangkan tombol loading
+        btnLoading.classList.toggle("d-none");
+        btnKirim.classList.toggle("d-none");
+        //tampilkan alert error
+        const errorAlert = document.querySelector(".error-alert");
+        errorAlert.classList.toggle("d-none");
+        //reset formnya
+        form.reset();
+        console.error("Error!", error.message);
+      });
+  } catch (error) {
+    //tampilan tombol kirim, hilangkan tombol loading
+    btnLoading.classList.toggle("d-none");
+    btnKirim.classList.toggle("d-none");
+    //tampilkan alert error
+    const errorAlert = document.querySelector(".error-alert");
+    errorAlert.classList.toggle("d-none");
+    //reset formnya
+    form.reset();
+    console.error("Error!", error.message);
+  }
+});
